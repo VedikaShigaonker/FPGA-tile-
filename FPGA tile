@@ -1,0 +1,31 @@
+
+module FPGA_tile(
+       input clk,
+       input [3:0] in_signals,
+       input [15:0] lut_config,
+       input d_ff,
+       input [7:0] config_sw,
+       output [3:0] out_signals
+    );
+    
+    wire CLB_out;
+    wire [3:0] sw_inputs;
+    
+    CLB uut(                               // CLB instantiation 
+     .lut_in(in_signals),
+     .lut_config(lut_config),
+     .clk(clk),
+     .d_ff(d_ff),
+     .CLB_out(CLB_out)
+     );
+     
+    assign sw_inputs = { CLB_out, in_signals[2:0]};
+    
+    SwitchMatrix uut1(                // Switch matrix instantiation 
+       .in_signals(sw_inputs),
+       .config_bits(config_sw),
+       .out_signals(out_signals)
+    );
+    
+    
+endmodule
