@@ -1,0 +1,22 @@
+
+module CLB(
+     input [3:0] lut_in,  //4 bits input
+     input [15:0] lut_config, // 2^4 = 16 combinations LUT truth table
+     input clk,
+     input d_ff, // 1: using flipflop , 0: directly output
+     output CLB_out
+    );
+    
+    wire lut_out;
+    assign lut_out = lut_config[{lut_in}];
+    
+    reg ff_out;
+    always@(posedge clk)
+     begin 
+       ff_out <= lut_out;  //D ff : d= q 
+     end 
+     
+    assign CLB_out = d_ff ?  ff_out : lut_out;   // MUX to choose if direct output or its delayed version through d ff 
+        
+   
+endmodule
